@@ -15,10 +15,9 @@ require_once 'navbar.html';
                 <strong> <?= $a['name']; ?> </strong>
             </p>
             <p>
-                <img src=<?= $a['poster'] ?> alt="" style="height:100px">
+                <img src="img/<?= $a['poster'] ?>.png" alt="" style="height:100px">
             </p>
         </div><?php endforeach;
             mysqli_close($db);
-
                 ?>
 </div>
