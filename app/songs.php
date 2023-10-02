@@ -8,7 +8,7 @@ require_once 'navbar.html';
     <input type="text" name="number" value="<?php echo empty($songsNumber)?'':$songsNumber?>" id="">
     <input type="submit" name="sbtn" value="SET">    
 </form>
-<button style="margin:20px"><a href="http://localhost:8000/songs.php/?page=1" style="text-decoration:none;color:darkgreen;font-weight:900;margin:20px;">Show</a></button>
+<button style="margin:20px"><a href="http://localhost:8000/songs.php/?page=1" style="text-decoration:none;color:darkgreen;font-weight:900;margin:20px;">Show all</a></button>
 <?php
 
 if (isset($_GET['page'])){
