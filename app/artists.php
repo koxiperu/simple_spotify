@@ -1,4 +1,11 @@
 <style>
+    .card {
+        background-color:rgb(233, 199, 243); 
+        padding:10px; 
+        margin:20px; 
+        width:200px;
+    }
+
     .col {
         display:flex;
         flex-direction: column;
@@ -11,12 +18,32 @@
         margin:10px auto;
     }
     .hide {
+        animation:opan 1s ease;
         display: none;
+        
     }
     .show {
+        animation:opaf 1s ease;
         display:flex;
+        
     }
-    
+    @keyframes opan {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+    @keyframes opaf {
+        from {
+            opacity:0;
+        }
+        to{
+            opacity: 1;
+        }
+    }
+
 </style>
 <?php
 require_once 'navbar.html';
@@ -34,7 +61,7 @@ require_once 'navbar.html';
     <div style="display:flex; width:100%; flex-wrap:wrap; margin:0 auto">
     <?php
     foreach ($artists as $a) : ?>
-        <div style="background-color:rgb(233, 199, 243); padding:10px; margin:20px; width:200px;">
+        <div class="card" id="card<?=$a['id']?>">
             <article id="a<?=$a['id']?>" class="one show col">
                 <p style="width:100%; text-align:center"><strong> <?= $a['name']; ?> </strong></p>
                 <img src="img/<?= $a['poster'] ?>.png" alt="" style="height:150px">
@@ -55,10 +82,11 @@ require_once 'navbar.html';
                 ?>
     </div>
 </div>
-<script>
+<script>    
     function checking(d) {
         id='a'+d;
-        if (document.querySelector(`#${id}.two`).classList.contains('show')) {
+        idc='card'+d;        
+        if (document.querySelector(`#${id}.two`).classList.contains('show')) {          
             document.querySelector(`#${id}.one`).classList.add('show');
             document.querySelector(`#${id}.one`).classList.remove('hide');
             document.querySelector(`#${id}.two`).classList.add('hide');
@@ -66,8 +94,8 @@ require_once 'navbar.html';
             info=false;
         }else{
             document.querySelector(`#${id}.one`).classList.add('hide');
-            document.querySelector(`#${id}.one`).classList.remove('show');
-            document.querySelector(`#${id}.two`).classList.add('show');
+            document.querySelector(`#${id}.one`).classList.remove('show');            
+            document.querySelector(`#${id}.two`).classList.add('show');            
             document.querySelector(`#${id}.two`).classList.remove('hide');
             info=true;
         };
