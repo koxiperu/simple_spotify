@@ -1,6 +1,6 @@
 <style>
     .card {
-        background-color:rgb(233, 199, 243); 
+        background-color:bisque; 
         padding:10px; 
         margin:20px; 
         width:200px;
@@ -48,24 +48,21 @@
 <?php
 require_once 'navbar.html';
 ?>
-<div style="margin:0 20px; padding:20px 20px; background-color:lightsalmon">
-    <h2>Artists</h2>
-    
+<div style="margin:0 20px; padding:20px 20px; background-color:white;">
+    <h1 style="color:rgb(123, 34, 1); text-align:center">Artists</h1>
+    <div style="display:flex; width:100%; flex-wrap:wrap; justify-content:space-around; margin:0 auto">    
     <?php
     $db = mysqli_connect('db', 'root', 'root', 'spotify');
     $qArt = 'SELECT * FROM artists';
     $result = mysqli_query($db, $qArt);
     $artists = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    //echo "<img src='" .$artists[1]['poster']. "'>";
-    ?>
-    <div style="display:flex; width:100%; flex-wrap:wrap; margin:0 auto">
-    <?php
     foreach ($artists as $a) : ?>
         <div class="card" id="card<?=$a['id']?>">
             <article id="a<?=$a['id']?>" class="one show col">
-                <p style="width:100%; text-align:center"><strong> <?= $a['name']; ?> </strong></p>
+                <h2 style="width:100%; text-align:center"><strong> <?= $a['name']; ?> </strong></h2>
                 <img src="img/<?= $a['poster'] ?>.png" alt="" style="height:150px">
-                <button style="padding:10px;" onclick="checking(<?=$a['id']?>)">More...</button> 
+                <button style="padding:10px; color:rgb(80, 29, 6);background-color: rgb(216, 173, 156)" onclick="checking(<?=$a['id']?>)">More...</button>
+                <a style="text-decoration:none; border:2px black solid; padding:10px; color:rgb(80, 29, 6);background-color: rgb(216, 173, 156)" href="http://localhost:8000/songs.php?artist=<?=$a['id']?>">Show songs</a> 
             </article> 
               
             <article id="a<?=$a['id']?>" class="two hide col">
@@ -73,7 +70,7 @@ require_once 'navbar.html';
                 <p><?=$a['bio']?> </p>
                 <p>Date of creation/birth: <br>
                     <?=$a['date_of_birth']?> </p>
-                <button style="padding:10px;" onclick="checking(<?=$a['id']?>)">Less...</button>
+                <button style="padding:10px;color:rgb(80, 29, 6);background-color: bisque" onclick="checking(<?=$a['id']?>)">Back</button>
             </article>
             
                        

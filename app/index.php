@@ -1,8 +1,14 @@
+<style>
+    .audio {
+        display:flex;
+        justify-content: center;
+    }
+</style>
 <?php
 require_once 'navbar.html';
 ?>
-<div style="margin:0 5%; padding:20px 5%; background-color:lightsalmon">
-    <h2>The three latest songs are:</h2>
+<div style="margin:0 5%; padding:20px 5%; background-color:white; display:flex; flex-direction:column; justify-content:center">
+    <h1 style="color:rgb(123, 34, 1); text-align:center">The three latest songs are:</h1>
     <?php
     $db = mysqli_connect('db', 'root', 'root', 'spotify');
     $qSongs = 'SELECT title, release_date, src, artists.name AS name FROM `songs`
@@ -15,12 +21,15 @@ require_once 'navbar.html';
     for ($i = 0; $i < 3; $i++) {
     ?>
         
-        <div style="background-color:rgb(233, 199, 243); padding:10px; margin:5px 50% 5px 0">
-            <h1><?= $i+1 ?>. <?= $bsongs[$i]['title']; ?></h1>
-            <audio controls src=<?=$bsongs[$i]['src']?>></audio>
-            <div style="display:flex; flex-direction:row; justify-content:space-between; font-size:30px">
+        <div style="background-color:bisque; padding:10px; margin:5px auto;width:70%">
+            <h2><?= $i+1 ?>. <?= $bsongs[$i]['title']; ?></h2>
+            <div class="audio">
+                <audio style="width:70%" controls src=<?=$bsongs[$i]['src']?>></audio>
+            </div>
+            
+            <div style="display:flex; flex-direction:row; justify-content:space-between; font-size:20px">
                 <p><?=$bsongs[$i]['name']?></p>
-                <p><?= $bsongs[$i]['release_date']; ?></p>
+                <p>Release date: <?= $bsongs[$i]['release_date']; ?></p>
             </div>    
         </div>
     <?php

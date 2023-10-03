@@ -1,11 +1,23 @@
+<style>
+    form>* {
+        width:100%;
+    }
+    form {
+        width:300px;
+    }
+    .audio {
+        display:flex;
+        justify-content: center;
+    }
+
+</style>
 <?php
 require_once 'navbar.html';
 ?>
-<div style="margin:0 5%; padding:20px 5%; border-radius:20px; background-color:lightsalmon">
-<div style="display:flex; flex-direction:row; align-items:center; gap:20px">
-    <form method="POST" style="display:flex; flex-direction:column; justify-content:center; align-items:center;gap:5px; background-color:white; padding:10px; margin:10px; width:200px; height:100px">
-        <label for="categ">Choose the artist: </label>
-        <select name="categ">
+<div style="display:flex; flex-direction:row; justify-content:center; align-items:center; gap:20px">
+    <form method="POST" style="display:flex; flex-direction:column; justify-content:center; align-items:center; background-color:bisque; height:100%; padding:10px; margin:0;">
+        <label for="categ" style="font-size:30px;">Choose the artist: </label>
+        <select style="font-size:20px;padding:10px" name="categ">
             <?php
             $db = mysqli_connect('db', 'root', 'root', 'spotify');
             $qArt = 'SELECT id,name FROM artists';
@@ -17,16 +29,19 @@ require_once 'navbar.html';
                 <?php endforeach;
                 ?>
         </select>
-        <input type="submit" name="sbtn" value="show songs of this artist">    
+        <input type="submit" name="sbtn" value="show songs of this artist" style="color:rgb(80, 29, 6);background-color: rgb(216, 173, 156);font-size:20px; padding:10px">    
     </form>
-    <h1> OR </h1>
-    <form method="POST">
-        <input type="submit" name="sbtnall" value="All songs" style="display:flex; flex-direction:column; justify-content:center; align-items:center;gap:5px; background-color:white; padding:10px; margin:10px; width:200px; height:100px">    
-    </form>
+    <h1 style="color:rgb(80, 29, 6)"> OR </h1>
+    <a href="http://localhost:8000/songs.php?page=1" style="text-decoration:none; color:black; display:flex; flex-direction:column; justify-content:center; text-align:center; background-color:bisque; padding:20px; height:110px;font-size:40px; width:300px">Show all songs</a>
 </div>
+<div style="margin:20px; padding:20px; background-color:white;display:flex; flex-direction:column; justify-content:center ">
 <?php
-if (isset($_POST['sbtn'])){
-    $chart=$_POST['categ'];
+if ((isset($_POST['sbtn']))or(isset($_GET['artist']))){
+    if (isset($_POST['sbtn'])) {
+        $chart=$_POST['categ'];
+    }else{
+        $chart=$_GET['artist'];
+    }; 
     $db=mysqli_connect('db','root','root','spotify');
     $qstring="SELECT title, release_date, src, artist_id, artists.name AS name FROM `songs`
               INNER JOIN `artists` ON
@@ -37,20 +52,23 @@ if (isset($_POST['sbtn'])){
     $songs=mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_close($db);
     ?>
-    <h1>Songs of <?=$songs[0]['name']?></h1>
-    <?php
-    foreach ($songs as $s):?>
-        <div style='background-color:rgb(233, 199, 243); display:flex; flex-direction:row; justify-content:space-between; border-radius:10px; padding:10px; margin:5px 50% 5px 0;'>
-            <p><strong> <?=$s['title']?> </strong></p>
-            <audio controls src=<?=$s['src']?>></audio>
-            <p><?=$s['release_date']?></p>
-        </div>
-    <?php endforeach;
-}else if (isset($_POST['sbtnall'])){
+    <h1 style="color:rgb(123, 34, 1); text-align:center">Songs of <?=$songs[0]['name']?></h1>
+        <?php
+            foreach ($songs as $s):?>
+                <div style='background-color:bisque; padding:10px; margin:5px auto;width:70%'>
+                    <h2><?=$s['title']?></h2>
+                    <div class="audio">
+                        <audio style="width:70%" controls src=<?=$s['src']?>></audio>
+                    </div>
+                    <p>Release date: <?=$s['release_date']?></p>
+                </div>
+            <?php endforeach;
+}else{
+        
     if (isset($_GET['page'])){
         $nbPage=$_GET['page'];
     }else {
-        $nbPage=1;
+        $nbPage=0;
     };
     $songsNumber=5;
     if ($nbPage>=1){ 
@@ -70,35 +88,37 @@ if (isset($_POST['sbtn'])){
         $songs=mysqli_fetch_all($result, MYSQLI_ASSOC);
         mysqli_close($db);
         ?>
-        <h1>All Songs</h1>
+        <h1 style="color:rgb(123, 34, 1); text-align:center">All songs:</h1>
         <?php
         foreach ($songs as $s) :?>
-                <div style='background-color:rgb(233, 199, 243); display:flex; flex-direction:row; justify-content:space-between; gap:20px; border-radius:10px; padding:10px; margin:5px 50% 5px 0;'>
-                    <p><strong><?= $s['title']?> </strong></p>
-                    <audio controls src=<?=$s['src']?>></audio>
+                <div style='background-color:bisque; padding:10px; margin:5px auto;width:70%'>
+                    <h2><?= $s['title']?></h2>
+                    <div class="audio">
+                        <audio style="width:70%" controls src=<?=$s['src']?>></audio>
+                    </div>
                     <p><?=$s['name']?></p></div>
                 <?php 
         endforeach; 
     
     ?>
-    <div>
+    <div style="display:flex; flex-direction:row; justify-content:center; gap:20px; margin:20px">
         <?php  if ($nbPage!=0) echo 'Page ' .$nbPage;?> 
-        <button disabled="<?php echo ($nbPage<=1)?'true':'false'?>">
+        <button style="padding:0" disabled="<?php echo ($nbPage<=1)?'true':'false'?>">
             <?php
                 if ($nbPage<=1) echo "Back";
                 else {
                     $cp=$nbPage-1;
-                    echo "<a href='?page=$cp' style='color:darkgreen;font-weight:900; text-decoration:none'>Back</a>";
+                    echo "<a href='?page=$cp' style='text-decoration:none; border:2px black solid; color:rgb(80, 29, 6);background-color: rgb(216, 173, 156); padding:10px 20px; width:50px;box-shadow:0 0 10px brown;'>Back</a>";
                 };
             ?>
         </button>
-        <button disabled="<?php echo ($nbPage==$end)?'true':'false'?>">
+        <button style="padding:0" disabled="<?php echo ($nbPage==$end)?'true':'false'?>">
             <?php 
                 if ($nbPage==0)  echo "Next";
                 else if ($nbPage==$end) echo "Next";
                     else {
                         $cp=$nbPage+1;
-                        echo "<a href='?page=$cp' style='color:darkgreen;font-weight:900;text-decoration:none'>Next</a>";
+                        echo "<a href='?page=$cp' style='text-decoration:none; border:2px black solid; box-shadow:0 0 10px brown; color:rgb(80, 29, 6);background-color: rgb(216, 173, 156);padding:10px 20px; width:50px'>Next</a>";
                     };
             ?>
         </button>
